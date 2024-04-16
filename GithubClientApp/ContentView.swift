@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  GithubClientApp
-//
-//  Created by 宗像恒 on 2024/04/16.
-//
-
 import SwiftUI
 
 struct ContentView: View {
