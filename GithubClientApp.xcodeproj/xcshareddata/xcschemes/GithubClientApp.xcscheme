@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63B687822BCEC81600B5D0F9"
-               BuildableName = "GithubClientApp.app"
-               BlueprintName = "GithubClientApp"
-               ReferencedContainer = "container:GithubClientApp.xcodeproj">
+               BuildableName = "GitHubClientApp.app"
+               BlueprintName = "GitHubClientApp"
+               ReferencedContainer = "container:GitHubClientApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -36,9 +36,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63B687972BCEE4D000B5D0F9"
-               BuildableName = "GithubClientAppTests.xctest"
-               BlueprintName = "GithubClientAppTests"
-               ReferencedContainer = "container:GithubClientApp.xcodeproj">
+               BuildableName = "GitHubClientAppTests.xctest"
+               BlueprintName = "GitHubClientAppTests"
+               ReferencedContainer = "container:GitHubClientApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -58,9 +58,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63B687822BCEC81600B5D0F9"
-            BuildableName = "GithubClientApp.app"
-            BlueprintName = "GithubClientApp"
-            ReferencedContainer = "container:GithubClientApp.xcodeproj">
+            BuildableName = "GitHubClientApp.app"
+            BlueprintName = "GitHubClientApp"
+            ReferencedContainer = "container:GitHubClientApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -82,9 +82,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63B687822BCEC81600B5D0F9"
-            BuildableName = "GithubClientApp.app"
-            BlueprintName = "GithubClientApp"
-            ReferencedContainer = "container:GithubClientApp.xcodeproj">
+            BuildableName = "GitHubClientApp.app"
+            BlueprintName = "GitHubClientApp"
+            ReferencedContainer = "container:GitHubClientApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

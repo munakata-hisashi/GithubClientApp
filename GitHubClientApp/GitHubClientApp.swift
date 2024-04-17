@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct GithubClientAppApp: App {
+struct GithHubClientApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

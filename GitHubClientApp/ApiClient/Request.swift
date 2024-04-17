@@ -1,14 +1,11 @@
 import Foundation
 
-typealias Input = Request
-
-typealias Request = (
-    url: URL,
-    queries: [URLQueryItem],
-    headers: [String: String],
-    methodAndPayload: HTTPMethodAndPayload
-)
-
+struct Request {
+    let url: URL
+    let queries: [URLQueryItem]
+    let headers: [String: String]
+    let methodAndPayload: HTTPMethodAndPayload
+}
 
 enum HTTPMethodAndPayload {
     case get
@@ -25,11 +22,5 @@ enum HTTPMethodAndPayload {
         case .get:
             return nil
         }
-    }
-}
-
-enum GithubApiClient {
-    static func call(with input: Input) {
-        
     }
 }
