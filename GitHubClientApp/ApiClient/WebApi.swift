@@ -14,7 +14,8 @@ enum WebApi {
     }
     
     static private func createURLRequest(by input: Request) -> URLRequest {
-        var request = URLRequest(url: input.url)
+        let url = input.url.appending(queryItems: input.queries)
+        var request = URLRequest(url: url)
         
         request.httpMethod = input.methodAndPayload.method
         

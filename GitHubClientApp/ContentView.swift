@@ -1,14 +1,49 @@
 import SwiftUI
 
 struct ContentView: View {
+    let userListClient: UserListClient = UserListClientImpl()
+    @State var userList: UserList = .init(users: [])
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List(userList.users) { user in
+                NavigationLink(
+                    value: user,
+                    label: {
+                        UserView(user: user)
+                    }
+                )
+            }
+            .navigationDestination(for: User.self) { user in
+                Text("UserDetail \(user.login)")
+            }
         }
-        .padding()
+        .task {
+            do {
+                userList = try await userListClient.fetch()
+            } catch {
+                print("\(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+struct UserView: View {
+    let user: User
+    var body: some View {
+        HStack(spacing: 8) {
+            AsyncImage(
+                url: user.avatarImageURL,
+                content: { image in
+                    image.resizable()
+                },
+                placeholder: {
+                    ProgressView()
+                }
+            )
+            .frame(width: 50, height: 50)
+            
+            Text("\(user.login)")
+        }
     }
 }
 
