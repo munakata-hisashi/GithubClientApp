@@ -1,8 +1,13 @@
 import Foundation
 
+
 struct UserListClient {
     let gitHubApiClient: GitHubApiClient
     
+    /// [List Users](https://docs.github.com/ja/rest/users/users?apiVersion=2022-11-28#list-users) APIを使ってユーザー一覧を取得する
+    /// - Parameters:
+    ///   -  nextPageLink: 追加読み込みのためのURL
+    /// - Returns: GitHubのユーザーのリスト
     func fetch(nextPageLink: String?) async throws -> UserList {
         let urlString = nextPageLink ?? "https://api.github.com/users"
         guard let url = URL(string: urlString) else {
