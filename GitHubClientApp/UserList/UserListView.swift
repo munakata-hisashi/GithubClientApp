@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct UserListView: View {
-    let userListClient: UserListClient = UserListClient()
+    let userListClient: UserListClient = UserListClient(gitHubApiClient: GitHubApiClientImpl())
     @State private var userList: UserList?
     
     var body: some View {

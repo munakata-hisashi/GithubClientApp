@@ -20,7 +20,7 @@ class UserList {
     }
 }
 
-struct User: Decodable, Identifiable, Hashable {
+struct User: Codable, Identifiable, Hashable {
     let id: Int
     let login: String
     let avatar_url: String

@@ -10,8 +10,8 @@ final class GitHubApiClientTests: XCTestCase {
             headers: [:],
             methodAndPayload: .get
         )
-        
-        let output = try await GitHubApiClient.call(with: input)
+        let gitHubApiClient = GitHubApiClientImpl()
+        let output = try await gitHubApiClient.call(with: input)
         let zen = try GitHubZen.from(response: output)
         XCTAssertFalse(zen.text.isEmpty)
     }

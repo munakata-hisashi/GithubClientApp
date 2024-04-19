@@ -1,9 +1,11 @@
 import Foundation
 
-enum GitHubApiClient {
-    static func call(with input: Request) async throws -> Response {
-       
-       
+protocol GitHubApiClient {
+    func call(with input: Request) async throws -> Response
+}
+
+struct GitHubApiClientImpl: GitHubApiClient {
+    func call(with input: Request) async throws -> Response {
         do {
             let urlRequest = try createURLRequest(by: input)
             let (data, response) = try await URLSession.shared.data(for: urlRequest)
@@ -14,7 +16,7 @@ enum GitHubApiClient {
         }
     }
     
-    static private func createURLRequest(by input: Request) throws -> URLRequest {
+    private func createURLRequest(by input: Request) throws -> URLRequest {
         guard let token = Env["PERSONAL_ACCESS_TOKEN"] else {
             throw ConnectionError.notFoundToken
         }
@@ -38,7 +40,7 @@ enum GitHubApiClient {
         return request
     }
     
-    static private func createOutput(data: Data, urlResponse: HTTPURLResponse?) throws -> Response {
+    private func createOutput(data: Data, urlResponse: HTTPURLResponse?) throws -> Response {
         guard let urlResponse else { throw ConnectionError.noDataOrNoResponse(debugInfo: "no response")}
         
         var headers: [String: String] = [:]

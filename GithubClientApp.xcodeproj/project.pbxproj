@@ -21,6 +21,7 @@
 		63B687B72BD04CEA00B5D0F9 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B687B62BD04CEA00B5D0F9 /* Environment.swift */; };
 		63B687B92BD173EA00B5D0F9 /* ResponseTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B687B82BD173EA00B5D0F9 /* ResponseTranslator.swift */; };
 		63B687BB2BD1748600B5D0F9 /* TransformError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B687BA2BD1748600B5D0F9 /* TransformError.swift */; };
+		63B687C02BD2CA6200B5D0F9 /* UserListClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B687BF2BD2CA6200B5D0F9 /* UserListClientTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		63B687B62BD04CEA00B5D0F9 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		63B687B82BD173EA00B5D0F9 /* ResponseTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseTranslator.swift; sourceTree = "<group>"; };
 		63B687BA2BD1748600B5D0F9 /* TransformError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformError.swift; sourceTree = "<group>"; };
+		63B687BF2BD2CA6200B5D0F9 /* UserListClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListClientTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 		63B687992BCEE4D000B5D0F9 /* GitHubClientAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				63B687BE2BD2CA5100B5D0F9 /* UserList */,
 				63B687A42BD004AB00B5D0F9 /* ApiClient */,
 			);
 			path = GitHubClientAppTests;
@@ -144,6 +147,14 @@
 				63B687B02BD03E6C00B5D0F9 /* UserListClient.swift */,
 				63B687882BCEC81600B5D0F9 /* UserListView.swift */,
 				63B687B22BD045CC00B5D0F9 /* UserList.swift */,
+			);
+			path = UserList;
+			sourceTree = "<group>";
+		};
+		63B687BE2BD2CA5100B5D0F9 /* UserList */ = {
+			isa = PBXGroup;
+			children = (
+				63B687BF2BD2CA6200B5D0F9 /* UserListClientTests.swift */,
 			);
 			path = UserList;
 			sourceTree = "<group>";
@@ -267,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B6879B2BCEE4D000B5D0F9 /* GitHubApiClientTests.swift in Sources */,
+				63B687C02BD2CA6200B5D0F9 /* UserListClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

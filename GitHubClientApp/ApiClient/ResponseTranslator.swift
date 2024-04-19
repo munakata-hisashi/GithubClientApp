@@ -1,10 +1,7 @@
 import Foundation
 
 enum ResponseTranslator {
-    private static let decoder: JSONDecoder = {
-        let jsonDecoder = JSONDecoder()
-        return jsonDecoder
-    }()
+    private static let decoder = JSONDecoder()
     
     static func from<T: Decodable>(response: Response) throws -> T {
         switch response.statusCode {
