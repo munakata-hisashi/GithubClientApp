@@ -1,7 +1,7 @@
 import XCTest
 @testable import GitHubClientApp
 
-final class WebApiTests: XCTestCase {
+final class GitHubApiClientTests: XCTestCase {
     
     func testRequestAndResponse() async throws {
         let input: Request = .init(
@@ -11,12 +11,13 @@ final class WebApiTests: XCTestCase {
             methodAndPayload: .get
         )
         
-        let output = try await WebApi.call(with: input)
-        XCTAssertNoThrow(try GitHubZen.from(response: output))
+        let output = try await GitHubApiClient.call(with: input)
+        let zen = try GitHubZen.from(response: output)
+        XCTAssertFalse(zen.text.isEmpty)
     }
 }
 
-/// WebApiテスト用
+/// GitHubApiClientテスト用
 struct GitHubZen {
     let text: String
     
@@ -32,22 +33,5 @@ struct GitHubZen {
         case .unsupported(let code):
             throw TransformError.unexpectedStatusCode(debugInfo: "unsupported code: \(code)")
         }
-    }
-    
-    static func fetch() async throws -> GitHubZen {
-        let urlString = "https://api.github.com/zen"
-        guard let url = URL(string: urlString) else {
-            throw ConnectionError.malformedURL(debugInfo: urlString)
-        }
-        
-        let request: Request = .init(
-            url: url,
-            queries: [],
-            headers: [:],
-            methodAndPayload: .get
-        )
-        
-        let response = try await WebApi.call(with: request)
-        return try .from(response: response)
     }
 }

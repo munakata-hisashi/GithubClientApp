@@ -1,36 +1,46 @@
 import Foundation
 
-protocol UserListClient {
-    func fetch() async throws ->  UserList
-}
-
-struct UserListClientImpl: UserListClient {
+struct UserListClient {
     
-    func fetch() async throws -> UserList {
-        let urlString = "https://api.github.com/users"
+    func fetch(nextPageLink: String?) async throws -> UserList {
+        let urlString = nextPageLink ?? "https://api.github.com/users"
         guard let url = URL(string: urlString) else {
             throw ConnectionError.malformedURL(debugInfo: urlString)
         }
-        guard let token = Env["PERSONAL_ACCESS_TOKEN"] else {
-            throw ConnectionError.notFoundToken
-        }
-        
+
         let request: Request = .init(
             url: url,
-            queries: [.init(name: "per_page", value: "3")],
-            headers: [
-                "Accept": "application/vnd.github+json",
-                "Authorization": "Bearer \(token)",
-                "X-GitHub-Api-Version": "2022-11-28"
-            ],
+            queries: [],
+            headers: [:],
             methodAndPayload: .get
         )
         
-        let response = try await WebApi.call(with: request)
+        let response = try await GitHubApiClient.call(with: request)
         let users: [User] = try ResponseTranslator.from(response: response)
         
-        return .init(users: users)
+        guard let nextPageLink = nextPageLinkExtractor(response.headers) else {
+            return .init(users: users)
+        }
+        return .init(users: users, nextPageLink: nextPageLink)
     }
     
+    private func nextPageLinkExtractor(_ headers: [String: String]) -> String? {
+        guard let headerValue = headers["link"], headerValue.contains("rel=\"next\"") else {
+            return nil
+        }
+        
+        let links = headerValue
+            .split(separator: ",")
+            .filter { $0.contains("rel=\"next\"")}
+        
+        let pattern = /<([^>]*)>/
+        
+        guard let link = links.first, let match = link.firstMatch(of: pattern) else {
+            return nil
+        }
+        
+        return String(match.1)
+        
+    }
     
 }

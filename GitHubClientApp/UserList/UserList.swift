@@ -1,7 +1,23 @@
 import Foundation
 
-struct UserList: Decodable {
-    let users: [User]
+@Observable
+class UserList {
+    var users: [User]
+    var nextPageLink: String?
+    
+    var lastUser: User? {
+        users.last
+    }
+    
+    func append(userList: UserList) {
+        users = users + userList.users
+        nextPageLink = userList.nextPageLink
+    }
+    
+    init(users: [User], nextPageLink: String? = nil) {
+        self.users = users
+        self.nextPageLink = nextPageLink
+    }
 }
 
 struct User: Decodable, Identifiable, Hashable {
