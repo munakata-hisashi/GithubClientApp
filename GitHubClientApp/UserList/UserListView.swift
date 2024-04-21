@@ -32,13 +32,14 @@ struct UserListView: View {
                 .navigationDestination(for: User.self) { user in
                     if let userPageURL = user.userPageURL,
                        let userReposURL = user.userReposURL {
-                        UserRepositoryView(userPageURL: userPageURL, userReposURL: userReposURL)
+                        UserRepositoryView(userPageURL: userPageURL, userReposURL: userReposURL, userName: user.login)
                     }
                 }
             } else {
                 ProgressView()
             }
         }
+        .navigationTitle("GitHub Users")
         .task {
             do {
                 userList = try await userListClient.fetch(nextPageLink: nil)

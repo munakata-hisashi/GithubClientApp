@@ -3,7 +3,11 @@ import Foundation
 @Observable
 class UserRepository {
     var userDetail: UserDetail
-    var repositories: [Repository]
+    private var repositories: [Repository]
+    
+    var originalRepositories: [Repository] {
+        repositories.filter { !$0.fork }
+    }
     
     init(userDetail: UserDetail, repositories: [Repository]) {
         self.userDetail = userDetail
@@ -23,11 +27,12 @@ struct UserDetail: Codable {
     }
 }
 
-struct Repository: Codable, Identifiable {
+struct Repository: Codable, Identifiable, Hashable {
     let id: Int
     let name: String
     let language: String?
     let stargazers_count: Int
     let description: String?
     let fork: Bool
+    let html_url: String
 }
