@@ -79,6 +79,12 @@ struct UserRepositoryListView: View {
             
         }
         .listStyle(.plain)
+        .navigationDestination(for: Repository.self) { repository in
+            if let repositoryPageURL = repository.repositoryPageURL {
+                
+                WebView(url: repositoryPageURL)
+            }
+        }
     }
 }
 
@@ -112,9 +118,10 @@ struct RepositoryView: View {
         }
     }
 }
-#Preview {
-    UserRepositoryView(
-        userPageURL: URL(string: "https://api.github.com/users/octocat")!,
-        userReposURL: URL(string: "https://api.github.com/users/octocat/repos")!, userName: "Rosa"
-    )
-}
+
+//#Preview {
+//    UserRepositoryView(
+//        userPageURL: URL(string: "https://api.github.com/users/octocat")!,
+//        userReposURL: URL(string: "https://api.github.com/users/octocat/repos")!, userName: "Rosa"
+//    )
+//}

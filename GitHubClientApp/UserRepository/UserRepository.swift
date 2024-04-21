@@ -35,4 +35,8 @@ struct Repository: Codable, Identifiable, Hashable {
     let description: String?
     let fork: Bool
     let html_url: String
+    
+    var repositoryPageURL: URL? {
+        URL(string: html_url)
+    }
 }
