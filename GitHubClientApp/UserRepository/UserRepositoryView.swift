@@ -6,12 +6,23 @@ struct UserRepositoryView: View {
     let userName: String
     let userRepositoryClient = UserRepositoryClient(gitHubApiClient: GitHubApiClientImpl())
     @State private var userRepository: UserRepository?
+    
     var body: some View {
         VStack {
             if let userRepository {
-                VStack {
+                VStack(alignment: .leading) {
                     UserDetailView(userDetail: userRepository.userDetail)
-                    UserRepositoryListView(repositories: userRepository.originalRepositories)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 16)
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Repositories")
+                            .font(.system(.title3, weight: .bold))
+                            .padding(.horizontal, 16)
+                        UserRepositoryListView(
+                            userRepository: userRepository,
+                            userRepositoryClient: userRepositoryClient
+                        )
+                    }
                 }
             } else {
                 ProgressView()
@@ -20,9 +31,9 @@ struct UserRepositoryView: View {
         .navigationTitle("\(userName)")
         .task {
             do {
-                let user = try await userRepositoryClient.fetch(userPageURL: userPageURL)
-                let repositories = try await userRepositoryClient.fetch(userRepositoriesURL: userReposURL)
-                userRepository = .init(userDetail: user, repositories: repositories)
+                async let user =  userRepositoryClient.fetch(userPageURL: userPageURL)
+                async let (repositories, nextPageLink) = userRepositoryClient.fetch(userRepositoriesURL: userReposURL)
+                userRepository = try await .init(userDetail: user, repositories: repositories, nextPageLink: nextPageLink)
             } catch {
                 print("\(error.localizedDescription)")
             }
@@ -67,21 +78,35 @@ struct UserDetailView: View {
 }
 
 struct UserRepositoryListView: View {
-    let repositories: [Repository]
+    var userRepository: UserRepository
+    let userRepositoryClient: UserRepositoryClient
+    
     var body: some View {
-        List(repositories) { repository in
+        List(userRepository.originalRepositories) { repository in
             NavigationLink(
                 value: repository,
                 label: {
                     RepositoryView(repository: repository)
+                        .task {
+                            guard let lastRepo = userRepository.originalRepositories.last,
+                                  let nextPageLink = userRepository.nextPageLink,
+                                  let url = URL(string: nextPageLink),
+                                  repository.id == lastRepo.id else {
+                                return
+                            }
+                            do {
+                                let (repositories, nextPageLink) = try await userRepositoryClient.fetch(userRepositoriesURL: url)
+                                userRepository.append(new: repositories, nextPageLink: nextPageLink)
+                            } catch {
+                                print("\(error.localizedDescription)")
+                            }
+                        }
                 }
             )
-            
         }
         .listStyle(.plain)
         .navigationDestination(for: Repository.self) { repository in
             if let repositoryPageURL = repository.repositoryPageURL {
-                
                 WebView(url: repositoryPageURL)
             }
         }
@@ -119,9 +144,9 @@ struct RepositoryView: View {
     }
 }
 
-//#Preview {
-//    UserRepositoryView(
-//        userPageURL: URL(string: "https://api.github.com/users/octocat")!,
-//        userReposURL: URL(string: "https://api.github.com/users/octocat/repos")!, userName: "Rosa"
-//    )
-//}
+#Preview {
+    UserRepositoryView(
+        userPageURL: URL(string: "https://api.github.com/users/octocat")!,
+        userReposURL: URL(string: "https://api.github.com/users/octocat/repos")!, userName: "Rosa"
+    )
+}

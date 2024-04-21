@@ -4,14 +4,21 @@ import Foundation
 class UserRepository {
     var userDetail: UserDetail
     private var repositories: [Repository]
+    var nextPageLink: String?
     
     var originalRepositories: [Repository] {
         repositories.filter { !$0.fork }
     }
     
-    init(userDetail: UserDetail, repositories: [Repository]) {
+    init(userDetail: UserDetail, repositories: [Repository], nextPageLink: String?) {
         self.userDetail = userDetail
         self.repositories = repositories
+        self.nextPageLink = nextPageLink
+    }
+    
+    func append(new: [Repository], nextPageLink: String?) {
+        repositories = repositories + new
+        self.nextPageLink = nextPageLink
     }
 }
 

@@ -6,7 +6,6 @@ import WebKit
 struct WebView: UIViewRepresentable {
     let url: URL
     func makeUIView(context: Context) -> WKWebView {
-        print("\(url.absoluteString)")
         let request = URLRequest(url: url)
         let webView = WKWebView(frame: .zero, configuration: .init())
         webView.uiDelegate = context.coordinator

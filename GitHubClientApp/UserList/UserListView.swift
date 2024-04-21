@@ -39,7 +39,6 @@ struct UserListView: View {
                 ProgressView()
             }
         }
-        .navigationTitle("GitHub Users")
         .task {
             do {
                 userList = try await userListClient.fetch(nextPageLink: nil)
