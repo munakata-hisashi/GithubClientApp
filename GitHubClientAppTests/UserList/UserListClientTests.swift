@@ -20,24 +20,4 @@ class UserListClientTests: XCTestCase {
         XCTAssertNil(userList.nextPageLink)
     }
     
-    func testExtractNextPageLink() async throws {
-        let headers = [
-            "link": "<https://api.github.com/users?per_page=2&since=2>; rel=\"next\", <https://api.github.com/users{?since}>; rel=\"first\""
-        ]
-        let client = UserListClient(gitHubApiClient: GitHubApiClientMock(response: .init(statusCode: .ok, headers: headers, payload: userData)))
-        
-        let userList = try await client.fetch(nextPageLink: nil)
-        XCTAssertEqual(userList.nextPageLink, "https://api.github.com/users?per_page=2&since=2")
-        
-    }
-    
-    func testNotExtractOtherLink() async throws {
-        let headers = [
-            "link": "<https://api.github.com/users{?since}>; rel=\"first\""
-        ]
-        let client = UserListClient(gitHubApiClient: GitHubApiClientMock(response: .init(statusCode: .ok, headers: headers, payload: userData)))
-        
-        let userList = try await client.fetch(nextPageLink: nil)
-        XCTAssertNil(userList.nextPageLink)
-    }
 }

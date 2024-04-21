@@ -24,29 +24,9 @@ struct UserListClient {
         let response = try await gitHubApiClient.call(with: request)
         let users: [User] = try ResponseTranslator.from(response: response)
         
-        guard let nextPageLink = extractNextPageLink(response.headers) else {
+        guard let nextPageLink = NextPageLinkExtractor.getNextPageLink(from: response.headers) else {
             return .init(users: users)
         }
         return .init(users: users, nextPageLink: nextPageLink)
     }
-    
-    private func extractNextPageLink(_ headers: [String: String]) -> String? {
-        guard let headerValue = headers["link"], headerValue.contains("rel=\"next\"") else {
-            return nil
-        }
-        
-        let links = headerValue
-            .split(separator: ",")
-            .filter { $0.contains("rel=\"next\"")}
-        
-        let pattern = /<([^>]*)>/
-        
-        guard let link = links.first, let match = link.firstMatch(of: pattern) else {
-            return nil
-        }
-        
-        return String(match.1)
-        
-    }
-    
 }
