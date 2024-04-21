@@ -24,8 +24,18 @@ struct User: Codable, Identifiable, Hashable {
     let id: Int
     let login: String
     let avatar_url: String
+    let url: String
+    let repos_url: String
     
     var avatarImageURL: URL? {
         URL(string: avatar_url)
+    }
+    
+    var userPageURL: URL? {
+        URL(string: url)
+    }
+    
+    var userReposURL: URL? {
+        URL(string: repos_url)
     }
 }

@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// ユーザー一覧画面
 struct UserListView: View {
     let userListClient: UserListClient = UserListClient(gitHubApiClient: GitHubApiClientImpl())
     @State private var userList: UserList?
@@ -29,7 +30,10 @@ struct UserListView: View {
                     )
                 }
                 .navigationDestination(for: User.self) { user in
-                    Text("UserDetail \(user.login)")
+                    if let userPageURL = user.userPageURL,
+                       let userReposURL = user.userReposURL {
+                        UserRepositoryView(userPageURL: userPageURL, userReposURL: userReposURL, userName: user.login)
+                    }
                 }
             } else {
                 ProgressView()
