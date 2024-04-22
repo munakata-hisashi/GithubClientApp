@@ -4,8 +4,12 @@ import SwiftUI
 struct UserListView: View {
     let userListClient: UserListClient = UserListClient(gitHubApiClient: GitHubApiClientImpl())
     @State private var userList: UserList?
-    
+    @State private var didFailLoad: Bool = false
+    @State private var loadId: UUID = .init()
+    @State private var addLoadId: UUID = .init()
+
     var body: some View {
+        let _ = Self._printChanges()
         NavigationStack {
             if let userList {
                 List(userList.users) { user in
@@ -13,7 +17,7 @@ struct UserListView: View {
                         value: user,
                         label: {
                             UserView(user: user)
-                                .task {
+                                .task(id: addLoadId) {
                                     guard let lastUser = userList.lastUser,
                                           let nextPageLink = userList.nextPageLink,
                                           user.id == lastUser.id else {
@@ -23,12 +27,13 @@ struct UserListView: View {
                                         let new = try await userListClient.fetch(nextPageLink: nextPageLink)
                                         userList.append(userList: new)
                                     } catch {
-                                        print("\(error.localizedDescription)")
+                                        didFailLoad = true
                                     }
                                 }
                         }
                     )
                 }
+                .navigationTitle("GitHub Users")
                 .navigationDestination(for: User.self) { user in
                     if let userPageURL = user.userPageURL,
                        let userReposURL = user.userReposURL {
@@ -39,16 +44,27 @@ struct UserListView: View {
                 ProgressView()
             }
         }
-        .task {
+        .alert("Users fetch failed", isPresented: $didFailLoad) {
+            Button("Retry") {
+                if userList == nil {
+                    loadId = .init()
+                } else {
+                    addLoadId = .init()
+
+                }
+            }
+        }
+        .task(id: loadId) {
             do {
                 userList = try await userListClient.fetch(nextPageLink: nil)
             } catch {
-                print("\(error.localizedDescription)")
+                didFailLoad = true
             }
         }
     }
 }
 
+/// ユーザーの情報を表示するコンポーネント
 struct UserView: View {
     let user: User
     var body: some View {

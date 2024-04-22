@@ -4,6 +4,7 @@ import Foundation
 class UserList {
     var users: [User]
     var nextPageLink: String?
+    var error: Error?
     
     var lastUser: User? {
         users.last
