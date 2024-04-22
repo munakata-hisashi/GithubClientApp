@@ -44,7 +44,7 @@ struct UserListView: View {
                 ProgressView()
             }
         }
-        .alert("User fetch failed", isPresented: $didFailLoad, actions: {
+        .alert("Users fetch failed", isPresented: $didFailLoad) {
             Button("Retry") {
                 if userList == nil {
                     loadId = .init()
@@ -53,7 +53,7 @@ struct UserListView: View {
 
                 }
             }
-        })
+        }
         .task(id: loadId) {
             do {
                 userList = try await userListClient.fetch(nextPageLink: nil)

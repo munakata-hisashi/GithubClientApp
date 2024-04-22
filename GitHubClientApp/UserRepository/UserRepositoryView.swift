@@ -10,6 +10,8 @@ struct UserRepositoryView: View {
     let userName: String
     let userRepositoryClient = UserRepositoryClient(gitHubApiClient: GitHubApiClientImpl())
     @State private var userRepository: UserRepository?
+    @State private var loadId: UUID = .init()
+    @State private var didFailLoad: Bool = false
     
     var body: some View {
         VStack {
@@ -34,13 +36,18 @@ struct UserRepositoryView: View {
         }
         .navigationTitle("\(userName)")
         .navigationBarTitleDisplayMode(.inline)
-        .task {
+        .alert("User's info fetch failed", isPresented: $didFailLoad) {
+            Button("Retry") {
+                loadId = .init()
+            }
+        }
+        .task(id: loadId) {
             do {
                 async let user =  userRepositoryClient.fetch(userPageURL: userPageURL)
                 async let (repositories, nextPageLink) = userRepositoryClient.fetch(userRepositoriesURL: userReposURL)
                 userRepository = try await .init(userDetail: user, repositories: repositories, nextPageLink: nextPageLink)
             } catch {
-                print("\(error.localizedDescription)")
+                didFailLoad = true
             }
             
         }
@@ -87,6 +94,7 @@ struct UserDetailView: View {
 struct UserRepositoryListView: View {
     var userRepository: UserRepository
     let userRepositoryClient: UserRepositoryClient
+    @State private var didFailLoad: Bool = false
     
     var body: some View {
         List(userRepository.originalRepositories) { repository in
@@ -104,12 +112,15 @@ struct UserRepositoryListView: View {
                                 let (repositories, nextPageLink) = try await userRepositoryClient.fetch(userRepositoriesURL: _nextPageLink)
                                 userRepository.append(new: repositories, nextPageLink: nextPageLink)
                             } catch {
-                                print("\(error.localizedDescription)")
+                                didFailLoad = true
                             }
                         }
                 }
             )
         }
+        .alert("User's repository fetch failed", isPresented: $didFailLoad, actions: {
+            Button("OK") {}
+        })
         .listStyle(.plain)
         .navigationDestination(for: Repository.self) { repository in
             if let repositoryPageURL = repository.repositoryPageURL {
