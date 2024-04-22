@@ -1,5 +1,6 @@
 import Foundation
 
+/// ユーザーリポジトリ画面で表示するモデル
 @Observable
 class UserRepository {
     var userDetail: UserDetail

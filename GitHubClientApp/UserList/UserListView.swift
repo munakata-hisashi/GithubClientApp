@@ -49,6 +49,7 @@ struct UserListView: View {
     }
 }
 
+/// ユーザーの情報を表示するコンポーネント
 struct UserView: View {
     let user: User
     var body: some View {

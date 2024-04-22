@@ -118,6 +118,7 @@ struct UserRepositoryListView: View {
     }
 }
 
+/// リポジトリの情報を表示するコンポーネント
 struct RepositoryView: View {
     let repository: Repository
     var body: some View {

@@ -1,5 +1,6 @@
 import Foundation
 
+/// APIリクエスト時のエラー
 enum ConnectionError: LocalizedError {
     case noDataOrNoResponse(debugInfo: String)
     case malformedURL(debugInfo: String)
