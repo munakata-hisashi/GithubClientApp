@@ -29,6 +29,7 @@ struct UserListView: View {
                         }
                     )
                 }
+                .navigationTitle("GitHub Users")
                 .navigationDestination(for: User.self) { user in
                     if let userPageURL = user.userPageURL,
                        let userReposURL = user.userReposURL {

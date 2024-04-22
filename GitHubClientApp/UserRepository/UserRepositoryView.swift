@@ -33,6 +33,7 @@ struct UserRepositoryView: View {
             }
         }
         .navigationTitle("\(userName)")
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             do {
                 async let user =  userRepositoryClient.fetch(userPageURL: userPageURL)
