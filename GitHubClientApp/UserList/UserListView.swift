@@ -4,8 +4,12 @@ import SwiftUI
 struct UserListView: View {
     let userListClient: UserListClient = UserListClient(gitHubApiClient: GitHubApiClientImpl())
     @State private var userList: UserList?
-    
+    @State private var didFailLoad: Bool = false
+    @State private var loadId: UUID = .init()
+    @State private var addLoadId: UUID = .init()
+
     var body: some View {
+        let _ = Self._printChanges()
         NavigationStack {
             if let userList {
                 List(userList.users) { user in
@@ -13,7 +17,7 @@ struct UserListView: View {
                         value: user,
                         label: {
                             UserView(user: user)
-                                .task {
+                                .task(id: addLoadId) {
                                     guard let lastUser = userList.lastUser,
                                           let nextPageLink = userList.nextPageLink,
                                           user.id == lastUser.id else {
@@ -23,7 +27,7 @@ struct UserListView: View {
                                         let new = try await userListClient.fetch(nextPageLink: nextPageLink)
                                         userList.append(userList: new)
                                     } catch {
-                                        print("\(error.localizedDescription)")
+                                        didFailLoad = true
                                     }
                                 }
                         }
@@ -40,11 +44,21 @@ struct UserListView: View {
                 ProgressView()
             }
         }
-        .task {
+        .alert("User fetch failed", isPresented: $didFailLoad, actions: {
+            Button("Retry") {
+                if userList == nil {
+                    loadId = .init()
+                } else {
+                    addLoadId = .init()
+
+                }
+            }
+        })
+        .task(id: loadId) {
             do {
                 userList = try await userListClient.fetch(nextPageLink: nil)
             } catch {
-                print("\(error.localizedDescription)")
+                didFailLoad = true
             }
         }
     }

@@ -1,6 +1,7 @@
 import Foundation
 
 protocol GitHubApiClient {
+    /// - throws: ConnectionError
     func call(with input: Request) async throws -> Response
 }
 
