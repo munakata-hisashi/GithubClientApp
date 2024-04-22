@@ -1,5 +1,9 @@
 import SwiftUI
 
+/// ユーザーリポジトリ画面
+///
+/// ユーザーの詳細情報としてアイコン、ユーザー名、フルネーム、フォロワー数、フォロイー数を表示する。
+/// またユーザーのforkedではないリポジトリを一覧表示する
 struct UserRepositoryView: View {
     let userPageURL: URL
     let userReposURL: URL
@@ -42,6 +46,7 @@ struct UserRepositoryView: View {
     }
 }
 
+/// ユーザーの詳細情報を表示するコンポーネント
 struct UserDetailView: View {
     let userDetail: UserDetail
     var body: some View {
@@ -77,6 +82,7 @@ struct UserDetailView: View {
     }
 }
 
+/// ユーザーのリポジトリを一覧表示するコンポーネント
 struct UserRepositoryListView: View {
     var userRepository: UserRepository
     let userRepositoryClient: UserRepositoryClient
@@ -89,13 +95,12 @@ struct UserRepositoryListView: View {
                     RepositoryView(repository: repository)
                         .task {
                             guard let lastRepo = userRepository.originalRepositories.last,
-                                  let nextPageLink = userRepository.nextPageLink,
-                                  let url = URL(string: nextPageLink),
+                                  let _nextPageLink = userRepository.nextPageLink,
                                   repository.id == lastRepo.id else {
                                 return
                             }
                             do {
-                                let (repositories, nextPageLink) = try await userRepositoryClient.fetch(userRepositoriesURL: url)
+                                let (repositories, nextPageLink) = try await userRepositoryClient.fetch(userRepositoriesURL: _nextPageLink)
                                 userRepository.append(new: repositories, nextPageLink: nextPageLink)
                             } catch {
                                 print("\(error.localizedDescription)")

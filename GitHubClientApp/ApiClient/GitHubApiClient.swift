@@ -40,6 +40,7 @@ struct GitHubApiClientImpl: GitHubApiClient {
         return request
     }
     
+    /// GitHubのAPIはページングにlinkヘッダーを使うのでlinkヘッダーが含まれていたらResponse.headersに追加する
     private func createOutput(data: Data, urlResponse: HTTPURLResponse?) throws -> Response {
         guard let urlResponse else { throw ConnectionError.noDataOrNoResponse(debugInfo: "no response")}
         
